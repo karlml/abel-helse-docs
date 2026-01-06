@@ -54,6 +54,33 @@
         .nav-link { position: relative; }
         .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #22c55e; transition: width 0.3s; }
         .nav-link:hover::after { width: 100%; }
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .mobile-menu.open {
+            max-height: 500px;
+            transition: max-height 0.3s ease-in;
+        }
+        .hamburger {
+            transition: transform 0.3s ease;
+        }
+        .hamburger.open {
+            transform: rotate(90deg);
+        }
+        .hamburger-line {
+            transition: all 0.3s ease;
+        }
+        .hamburger.open .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .hamburger.open .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.open .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
     </style>
 </head>
 <body class="bg-dark-900 text-gray-100 font-outfit antialiased">
@@ -62,6 +89,7 @@
         <div class="max-w-7xl mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <a href="#" class="text-2xl font-bold gradient-text">ABEL</a>
+                <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center gap-8">
                     <a href="#intro" class="nav-link text-gray-400 hover:text-white transition">Introduksjon</a>
                     <a href="#journey" class="nav-link text-gray-400 hover:text-white transition">Kundereise</a>
@@ -69,6 +97,23 @@
                     <a href="#results" class="nav-link text-gray-400 hover:text-white transition">Resultater</a>
                     <a href="#comparison" class="nav-link text-gray-400 hover:text-white transition">Sammenligning</a>
                     <a href="#deep-research" class="nav-link text-gray-400 hover:text-white transition">Deep Research</a>
+                </div>
+                <!-- Hamburger Menu Button -->
+                <button id="hamburger-btn" class="md:hidden hamburger flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
+                    <span class="hamburger-line w-6 h-0.5 bg-gray-300"></span>
+                    <span class="hamburger-line w-6 h-0.5 bg-gray-300"></span>
+                    <span class="hamburger-line w-6 h-0.5 bg-gray-300"></span>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu md:hidden">
+                <div class="pt-4 pb-2 space-y-2">
+                    <a href="#intro" class="block py-3 px-4 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition">Introduksjon</a>
+                    <a href="#journey" class="block py-3 px-4 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition">Kundereise</a>
+                    <a href="#services" class="block py-3 px-4 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition">Tjenester</a>
+                    <a href="#results" class="block py-3 px-4 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition">Resultater</a>
+                    <a href="#comparison" class="block py-3 px-4 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition">Sammenligning</a>
+                    <a href="#deep-research" class="block py-3 px-4 text-gray-400 hover:text-white hover:bg-dark-700/50 rounded-lg transition">Deep Research</a>
                 </div>
             </div>
         </div>
@@ -1484,5 +1529,33 @@
             <p class="text-gray-500 text-sm">Dokumentasjon basert på offentlig tilgjengelig informasjon</p>
         </div>
     </footer>
+
+    <script>
+        // Hamburger menu toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        hamburgerBtn.addEventListener('click', () => {
+            hamburgerBtn.classList.toggle('open');
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Close menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                hamburgerBtn.classList.remove('open');
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburgerBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                hamburgerBtn.classList.remove('open');
+                mobileMenu.classList.remove('open');
+            }
+        });
+    </script>
 </body>
 </html>
