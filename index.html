@@ -1,651 +1,794 @@
 <!DOCTYPE html>
-<html lang="no">
+<html lang="no" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abel Helse: Kundereise, Tjenesteinnhold og Sammenligning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'outfit': ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        'abel': {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        'dark': {
+                            900: '#0a0a0b',
+                            800: '#121214',
+                            700: '#1a1a1d',
+                            600: '#27272a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        body { font-family: 'Outfit', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(135deg, #22c55e 0%, #4ade80 50%, #86efac 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 20px;
-            margin: -20px -20px 30px -20px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        h2 {
-            color: #667eea;
-            font-size: 1.8em;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
-        }
-
-        h3 {
-            color: #764ba2;
-            font-size: 1.4em;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-
-        h4 {
-            color: #555;
-            font-size: 1.2em;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            margin-bottom: 15px;
-            text-align: justify;
-        }
-
-        ul, ol {
-            margin-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
-            vertical-align: top;
-        }
-
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .highlight-box {
-            background-color: #e8f4f8;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 4px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .comparison-table {
-            overflow-x: auto;
-        }
-
-        .comparison-table table {
-            min-width: 800px;
-        }
-
-        .key-points {
-            background-color: #fff9e6;
-            border-left: 4px solid #ffc107;
-            padding: 20px;
-            margin: 25px 0;
-        }
-
-        .key-points h4 {
-            margin-top: 0;
-            color: #764ba2;
-        }
-
-        footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 2px solid #eee;
-            text-align: center;
-            color: #777;
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 1.8em;
-            }
-
-            h2 {
-                font-size: 1.4em;
-            }
-
-            .container {
-                padding: 15px;
-            }
-
-            table {
-                font-size: 0.9em;
-            }
-
-            th, td {
-                padding: 8px;
-            }
-        }
+        .glow { box-shadow: 0 0 60px rgba(34, 197, 94, 0.15); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .table-container { overflow-x: auto; }
+        .nav-link { position: relative; }
+        .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #22c55e; transition: width 0.3s; }
+        .nav-link:hover::after { width: 100%; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Abel Helse</h1>
-            <p style="font-size: 1.2em; margin-top: 10px;">Kundereise, Tjenesteinnhold og Sammenligning med Andre Helseveiledere</p>
-        </header>
-
-        <section class="section">
-            <h2>Introduksjon</h2>
-            <p>Abel Helse (ABEL Health) er en norsk helseteknologibedrift (grunnlagt i 2017) som tilbyr digital helseveiledning for å forbedre fysisk, mental og sosial helse. Selskapet kombinerer en egen helseapp med personlige veiledere for å hjelpe brukere til varige livsstilsendringer. Abel retter seg mot flere målgrupper – både bedrifter som vil redusere sykefravær, privatpersoner som ønsker livsstilsendring, og pasienter henvist via NAV eller fastlege. Tjenesten bygger på vitenskapelig dokumenterte metoder og har vist lovende resultater i form av bedre helse og redusert sykefravær.</p>
-            <p>Nedenfor kartlegges Abel Helses kundereise og tjenestemodell, før den sammenlignes med lignende aktører i Norden og internasjonalt.</p>
-        </section>
-
-        <section class="section">
-            <h2>Kundereisen for ulike målgrupper</h2>
-            <p>Abel Helse tilpasser kundereisen etter brukerens kontekst:</p>
-
-            <div class="key-points">
-                <h4>For bedrifter og ansatte</h4>
-                <ul>
-                    <li>Arbeidsgivere inngår avtale med Abel for sine ansatte</li>
-                    <li>Ansatte melder seg på via Abel-appen, gjennomgår en enkel digital onboarding som kartlegger deres helsesituasjon, mål og tilgjengelighet</li>
-                    <li>Deretter foretas en behovsanalyse og Abel matcher hver deltaker med riktig personlig veileder med relevant kompetanse</li>
-                    <li>Veilederen følger opp den ansatte tett for å nå avtalte mål</li>
-                    <li>Arbeidsgiver mottar aggregert innsikt om bruk, trivsel og progresjon, uten at personvernet kompromitteres</li>
-                    <li>Kundereisen avsluttes ikke etter et engangsprogram – Abel tilbyr løpende oppfølging for å sikre varige vaner og redusert sykefravær</li>
-                </ul>
-                <p><strong>Resultat:</strong> En case-study hos Abel viste f.eks. 59% reduksjon i sykefravær på 3 måneder hos en bedrift.</p>
+<body class="bg-dark-900 text-gray-100 font-outfit antialiased">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-600">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="#" class="text-2xl font-bold gradient-text">ABEL</a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#intro" class="nav-link text-gray-400 hover:text-white transition">Introduksjon</a>
+                    <a href="#journey" class="nav-link text-gray-400 hover:text-white transition">Kundereise</a>
+                    <a href="#services" class="nav-link text-gray-400 hover:text-white transition">Tjenester</a>
+                    <a href="#results" class="nav-link text-gray-400 hover:text-white transition">Resultater</a>
+                    <a href="#comparison" class="nav-link text-gray-400 hover:text-white transition">Sammenligning</a>
+                </div>
             </div>
+        </div>
+    </nav>
 
-            <div class="key-points">
-                <h4>For privatpersoner (direktekunder)</h4>
-                <p>Abel tilbyr konseptet <strong>MITT Beste</strong>, en direktebetalende tjeneste for enkeltpersoner som vil forbedre livsstil:</p>
-                <ul>
-                    <li>Kunden registrerer seg via nettsiden, oppretter bruker i Abel-appen og velger en helsepakke (f.eks. "Trygg vektnedgang" eller "Mental helse") til fast månedspris</li>
-                    <li>Etter kjøp blir brukeren kontaktet av en sertifisert digital helseveileder innen 48 timer</li>
-                    <li>Veilederen gjennomfører en dybdekartlegging og sammen utarbeides en skreddersydd helseplan tilpasset brukerens mål og hverdag</li>
-                    <li>Oppfølgingen skjer jevnlig (ukentlig eller annenhver uke avhengig av avtalt pakke) via videosamtaler i Abel-appen, supplert med chat-meldinger og oppgaver mellom møtene</li>
-                    <li>MITT Beste-operatøren tilbyr resultatgaranti – når brukeren følger opplegget skal vedkommende nå definerte mål, ellers refunderes kostnaden</li>
-                    <li>Et standard kundeforløp varer minimum 3 måneder (bindingsperiode) for å sikre nok tid til varig vaneendring, men mange fortsetter videre som abonnenter dersom de opplever positiv effekt</li>
-                </ul>
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="absolute inset-0 bg-gradient-to-br from-dark-900 via-dark-800 to-abel-900/20"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-abel-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-abel-400/5 rounded-full blur-3xl"></div>
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center gap-2 bg-abel-500/10 border border-abel-500/20 rounded-full px-4 py-2 mb-8">
+                <span class="w-2 h-2 bg-abel-400 rounded-full animate-pulse"></span>
+                <span class="text-abel-400 text-sm font-medium">Grunnlagt 2017 • Norsk helseteknologi</span>
             </div>
-
-            <div class="key-points">
-                <h4>For NAV- eller lege-henviste</h4>
-                <ul>
-                    <li>Abel samarbeider med helsevesenet for å ta imot henvisninger av pasienter som trenger oppfølging for å komme tilbake i arbeid eller bedre sin helse. Personvernerklæringen til Abel bekrefter at man kan bruke tjenesten "fordi du er henvist av lege eller NAV"</li>
-                    <li>I praksis ligner løypa på den for privatpersoner: den henviste får tilgang til Abel-appen (ofte dekket av det offentlige eller forsikring), registrerer seg og kobles med en helseveileder</li>
-                    <li>Veiledningen skjer digitalt via appen med personlig oppfølging, tilsvarende MITT Beste-konseptet</li>
-                    <li>Abel har deltatt i et pilotprosjekt med fastleger hvor pasienter med livsstilssykdommer fikk digital helseveiledning, noe som er omtalt i revidert Folkehelsemelding 2023</li>
-                    <li>Visjonen er at slike strukturerte veiledningsløp kan tilbys bredt i primærhelsetjenesten – det estimeres at opptil 70% av befolkningen kan få tilbud om digital helseveiledning etter legehenvisning hvis modellen skaleres nasjonalt</li>
-                    <li>For NAV-tilfeller (f.eks. langtidssykemeldte) brukes Abel som et verktøy for arbeidsrettet rehabilitering, i tett samarbeid med helsetjenesten</li>
-                    <li>Nordea Liv (forsikringsaktør) inngikk nylig avtale med Abel for å tilby helseveiledning til langtidssykemeldte ansatte hos sine bedriftskunder, med mål om å unngå varig uførhet. Disse henviste brukerne får både fysisk og digital oppfølging med helhetlig behandling, finansiert av forsikringen eller det offentlige</li>
-                    <li>Kundereisen her vektlegger tverrfaglig samarbeid: Abel-appen deler relevant data med behandlere gjennom sikre integrasjoner (jf. BankID-innlogging og journalsystemkobling via Egde Health Gateway). Dermed får pasient, veileder og ordinær behandler en felles plattform og bedre beslutningsgrunnlag</li>
-                </ul>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                <span class="text-white">Abel</span>
+                <span class="gradient-text"> Helse</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed">
+                Kundereise, Tjenesteinnhold og Sammenligning med Andre Helseveiledere
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <div class="bg-dark-700/50 border border-dark-600 rounded-2xl px-6 py-4">
+                    <div class="text-3xl font-bold text-abel-400">50k+</div>
+                    <div class="text-gray-500 text-sm">Brukere hjulpet</div>
+                </div>
+                <div class="bg-dark-700/50 border border-dark-600 rounded-2xl px-6 py-4">
+                    <div class="text-3xl font-bold text-abel-400">70%</div>
+                    <div class="text-gray-500 text-sm">Redusert sykefravær</div>
+                </div>
+                <div class="bg-dark-700/50 border border-dark-600 rounded-2xl px-6 py-4">
+                    <div class="text-3xl font-bold text-abel-400">45+</div>
+                    <div class="text-gray-500 text-sm">Sertifiserte veiledere</div>
+                </div>
+                <div class="bg-dark-700/50 border border-dark-600 rounded-2xl px-6 py-4">
+                    <div class="text-3xl font-bold text-abel-400">99%</div>
+                    <div class="text-gray-500 text-sm">5-stjerners rating</div>
+                </div>
             </div>
+            <a href="#intro" class="inline-flex items-center gap-2 text-abel-400 hover:text-abel-300 transition">
+                <span>Les mer</span>
+                <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </a>
+        </div>
+    </header>
 
-            <div class="highlight-box">
-                <h4>Oppfølgingen over tid</h4>
-                <p>Felles for alle brukergrupper er at Abel fokuserer på lav terskel og høy kvalitet over tid. Brukeren beholder normalt samme personlige veileder gjennom hele forløpet, for å bygge tillit og kontinuitet. Veilederen sender jevnlig motivasjonsmeldinger, justerer plan ved behov og fanger opp utfordringer tidlig.</p>
-                <p>Abel benytter forebygging og tidlig intervensjon som prinsipp: veilederne kan fange opp risikofaktorer (stress, begynnende plager etc.) og iverksette tiltak før fravær oppstår. Denne tette oppfølgingen adresseres som en suksessfaktor: I et intervju har Abels ledelse påpekt at de unngår en "pisk-kultur" – i stedet for press og straff fokuseres det på positiv motivasjon og støtte, hvilket de mener gir bedre langsiktig effekt på brukeratferd.</p>
-                <p>Etter endt program får brukerne gjerne tilbud om vedlikeholdsoppfølging eller gjenaktivering ved behov. Abel samler også inn tilbakemeldinger fra brukerne (anonymt) for å måle tilfredshet og justere tjenesten kontinuerlig.</p>
+    <main class="max-w-7xl mx-auto px-6">
+        <!-- Introduksjon -->
+        <section id="intro" class="py-24">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Introduksjon</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
             </div>
-        </section>
-
-        <section class="section">
-            <h2>Tjenesteinnhold, metoder og verktøy</h2>
-
-            <h3>Innhold og temaer</h3>
-            <p>Abel Helse tilbyr helhetlig veiledning innen en rekke helseområder. Bedriftskundene kan velge fokusområder etter de ansattes behov, og Abel kan skalere opplegget til hele organisasjonen. Kjerneområdene inkluderer blant annet:</p>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Område</th>
-                        <th>Beskrivelse</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Stress & utbrenthet</strong></td>
-                        <td>Individuelle strategier for stressmestring og forebygging av utbrenthet</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Søvn & restitusjon</strong></td>
-                        <td>Etablering av sunne søvnrutiner og teknikker for bedre søvnkvalitet og energinivå</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Fysisk aktivitet & muskel/skjelett</strong></td>
-                        <td>Skreddersydd treningsprogram tilpasset hverdagen, for å styrke muskulatur og forebygge smerter i rygg, nakke, skuldre</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Kosthold & vaner</strong></td>
-                        <td>Praktiske grep for sunn mat i en travel hverdag – uten ekstreme dietter, men fokus på varige vaner</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Mental mestring</strong></td>
-                        <td>Hjelp til fokus, motivasjon, selvledelse – bygge psykologisk styrke og robusthet i hverdagen</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Arbeidshverdag & produktivitet</strong></td>
-                        <td>Råd om struktur, prioritering og "digitale vitamin-D-doser" (pauser og balanse) for å jobbe smartere og unngå overbelastning</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Personlig veiledning og coaching</h3>
-            <p>Abel-veilederen tilpasser veiledningens innhold til brukerens mål. For eksempel vil en NAV-henvist med muskelsmerter få et annet opplegg enn en frisk ansatt som sliter med stress. Likevel følger Abel en del felles metodiske prinsipper:</p>
-            <ul>
-                <li>Hver bruker får en dedikert digital helseveileder (coach) som er ansvarlig for oppfølgingen</li>
-                <li>Veileder og bruker har jevnlig en-til-en-samtaler via video eller telefon (typisk ukentlig eller annenhver uke). Samtalene brukes til å gjennomgå progresjon, diskutere utfordringer og sette delmål</li>
-                <li>I MITT Beste sine pakker er "Enkel"-pakken inkludert oppfølging annenhver uke, mens "Komplett"-pakken gir ukentlige samtaler</li>
-                <li>Veiledningssamtalene varer normalt 30–60 minutter</li>
-                <li>Kontinuitet er sentralt – om mulig beholder brukeren samme veileder over tid for å bygge en sterk coach-bruker-relasjon. Om veileder blir syk eller lignende, har Abel rutiner for å tilby en vikarveileder slik at brukeren ikke blir stående uten oppfølging</li>
-            </ul>
-
-            <h3>Digital plattform (ABEL-appen)</h3>
-            <p>All kommunikasjon og innholdsformidling skjer via Abel sin sikre app (tilgjengelig på mobil og web). Appen fungerer som bindeledd mellom bruker og veileder og inneholder:</p>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Funksjon</th>
-                        <th>Beskrivelse</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Helseplan og aktiviteter</strong></td>
-                        <td>Brukeren får en skreddersydd plan i appen med konkrete aktiviteter innen trening, kosthold, søvn, mental øvelse osv. Planen oppdateres dynamisk av veilederen. Man kan f.eks. få ukemeny, treningsøvelser, påminnelser om leggetid, eller oppgaver som å ta pauser på jobb</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Dagbok og målinger</strong></td>
-                        <td>Brukeren kan loggføre egenaktivitet – f.eks. treningsøkter, måltider, vekt, søvnlengde, smerte eller humør – alt etter hva som er relevant. Appen visualiserer fremgang gjennom grafer og statistikk som gjør det motiverende å følge med. Den kan også integrere data fra smartklokker/skritttellere ifm. fysisk aktivitet (f.eks. via Apple Health/Google Fit). For firmaavtaler er personvern viktig: ledelsen ser bare aggregert statistikk, mens individets detaljer er konfidensielle</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Kommunikasjon</strong></td>
-                        <td>Appen har sikker chat-funksjon der brukeren kan sende meldinger eller spørsmål til veilederen når som helst, og typisk få svar innen kort tid. I MITT Beste loves "regelmessig tilbakemelding og oppfølging" gjennom appen – brukeren er aldri "alene" i prosessen. Appen legger til rette for videomøter direkte i grensesnittet, slik at alt foregår på én plattform</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Læringsinnhold</strong></td>
-                        <td>Abel leverer mye pedagogisk innhold gjennom appen: korte artikler, tips og råd, påminnelser og lenker til ressurser. For eksempel får brukerne av MITT Beste daglige/ukentlige artikler og verktøy basert på ny forskning innen kosthold, mental helse m.m., slik at de forstår hvorfor endringene er viktige. Dette øker brukerens kunnskap og indre motivasjon. Abel har også produsert podkast og videoressurser som brukerne kan benytte for inspirasjon</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <h3>Metodikk og verktøy</h3>
-            <p>Abel-veilederne benytter vitenskapsbaserte metoder for adferdsendring. De bygger bl.a. på prinsipper fra kognitiv atferdsterapi, motiverende intervju og vanecoaching. Selskapet fremhever at alle veiledere bruker dokumentert teknikker for å oppnå varige endringer i livsstil.</p>
-            <p>I praksis betyr det at veilederen hjelper brukeren med realistisk målsetting, belønning av små fremskritt, bevisstgjøring rundt barrierer og utløsningsfaktorer, osv. Et eksempel er vanecoaching: En av Abels veiledere er Norges eneste sertifiserte vanecoach, Andreas Lycke, som råder brukerne til å minne seg selv på "hvorfor de gode vanene er så viktige" for å holde motivasjonen oppe.</p>
-            <p>Abel integrerer også elementer av kunstig intelligens i appen; opprinnelig (2019) brukte de algoritmer og maskinlæring til å gi individuelle råd automatisk, men fant ut at dette alene ikke holdt på brukernes motivasjon. I dag brukes AI som supplement (for eksempel til å varsle veileder om brukere som sliter, eller foreslå justeringer), men menneskelig kontakt er i sentrum. Abels grunnlegger understreker at teknologi må kombineres med ekte fagpersoner for å oppnå at folk faktisk bruker appen dag etter dag.</p>
-
-            <h3>Fysisk oppfølging (Onsite)</h3>
-            <p>I 2025 lanserte Abel <strong>ABEL Onsite</strong>, et tilbud der de kommer ut til bedriften fysisk og tilbyr tjenester på stedet. Dette er en forlengelse av den digitale veiledningen og kan inkludere inspirerende gruppetreninger, praktiske workshops, foredrag med eksperter innen trening, ernæring, søvn, mental balanse og stressmestring. Man kan også få fysikalsk behandling (fysioterapi) gjennom Onsite.</p>
-            <p>Hensikten er å gjøre det enda enklere for ansatte å ta vare på helsen "der de er" – i arbeidshverdagen. Onsite-tilbudet skreddersys per bedrift (Abel har pr. aug 2025 etablerte lokasjoner man kan velge) og kan kombineres med den digitale oppfølgingen. Dette hybrid-opplegget skiller Abel litt fra rene app-baserte tjenester.</p>
-            
-            <div class="highlight-box">
-                <h4>Sammenfattet</h4>
-                <p>Sammenfattet leverer Abel Helse altså et helhetlig tjenestetilbud med personlig coaching, en omfattende digital plattform og fleksible leveranseformer. Tjenesten har lav terskel (lett tilgjengelig via mobil, ingen krav om fysisk oppmøte) og høy faglig kvalitet (evidensbasert innhold, sertifiserte veiledere) – noe de selv oppsummerer som <strong>"Høy kvalitet. Lav terskel. Dokumentert effekt."</strong></p>
+            <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-8 md:p-12 glow">
+                <p class="text-lg text-gray-300 leading-relaxed mb-6">
+                    <span class="text-abel-400 font-semibold">Abel Helse (ABEL Health)</span> er en norsk helseteknologibedrift (grunnlagt i 2017) som tilbyr digital helseveiledning for å forbedre fysisk, mental og sosial helse. Selskapet kombinerer en egen helseapp med personlige veiledere for å hjelpe brukere til varige livsstilsendringer.
+                </p>
+                <p class="text-lg text-gray-300 leading-relaxed mb-6">
+                    Abel retter seg mot flere målgrupper – både bedrifter som vil redusere sykefravær, privatpersoner som ønsker livsstilsendring, og pasienter henvist via NAV eller fastlege. Tjenesten bygger på vitenskapelig dokumenterte metoder og har vist lovende resultater i form av bedre helse og redusert sykefravær.
+                </p>
+                <div class="flex flex-wrap gap-3 mt-8">
+                    <span class="px-4 py-2 bg-abel-500/10 text-abel-400 rounded-full text-sm font-medium">Bedrifter</span>
+                    <span class="px-4 py-2 bg-abel-500/10 text-abel-400 rounded-full text-sm font-medium">Privatpersoner</span>
+                    <span class="px-4 py-2 bg-abel-500/10 text-abel-400 rounded-full text-sm font-medium">NAV-henviste</span>
+                    <span class="px-4 py-2 bg-abel-500/10 text-abel-400 rounded-full text-sm font-medium">Fastlege-henviste</span>
+                </div>
             </div>
         </section>
 
-        <section class="section">
-            <h2>Veiledernes kompetanse</h2>
-            <p>En nøkkelfaktor i Abel-modellen er kompetansen til helseveilederne. Abel Helse har bygget opp et stort team av veiledere med variert helsebakgrunn. Ifølge Norges forskningsråd har Abel per 2025 over 45 veiledere ansatt, med utdanning som bl.a. fysioterapeut, psykolog eller sykepleier.</p>
+        <!-- Kundereisen -->
+        <section id="journey" class="py-24">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Kundereisen</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+            </div>
+            <p class="text-gray-400 text-center max-w-2xl mx-auto mb-12">Abel Helse tilpasser kundereisen etter brukerens kontekst</p>
 
-            <h3>Utdanning og sertifisering</h3>
-            <ul>
-                <li>Abel tok i 2023 initiativ til å etablere en formell etterutdanning for digitale helseveiledere i samarbeid med Høyskolen Kristiania m.fl.</li>
-                <li>Utdanningen resulterer i en sertifisering som "Digital Helseveileder". Dette har blitt et tverrfaglig konsortium støttet av pasientorganisasjoner og akademia, og over 200 studenter var tatt opp det første året</li>
-                <li>Minstekravet Abel setter for sine veiledere er en bachelorgrad innen relevant helsefag (f.eks. ernæring, helsepsykologi, fysioterapi, ergoterapi) kombinert med denne etterutdanningen som digital veileder</li>
-                <li>Mange har også mastergrader eller flere års klinisk erfaring. Eksempelvis har Abel-veiledere presentert på sine sider bakgrunner som Master i idrettsmedisin, Bachelor i psykologi + master i rådgivning, tidligere toppidrettsutøver, ergoterapeut, pedagog med fokus på mental helse osv. Dette gir et team med bred kompetanse, slik at Abel kan matche brukere med en veileder som forstår deres problemstillinger (f.eks. en fysioterapeut til en med muskelplager, eller en psykolog til en med stress/utbrenthet)</li>
-            </ul>
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <!-- Bedrifter -->
+                <div class="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-3xl p-8 card-hover">
+                    <div class="w-14 h-14 bg-amber-500/20 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-amber-400 mb-4">For bedrifter og ansatte</h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex items-start gap-2"><span class="text-amber-400 mt-1">•</span>Arbeidsgivere inngår avtale med Abel for sine ansatte</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-400 mt-1">•</span>Digital onboarding kartlegger helsesituasjon, mål og tilgjengelighet</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-400 mt-1">•</span>Behovsanalyse og matching med riktig personlig veileder</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-400 mt-1">•</span>Tett oppfølging for å nå avtalte mål</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-400 mt-1">•</span>Aggregert innsikt til arbeidsgiver uten å kompromittere personvern</li>
+                        <li class="flex items-start gap-2"><span class="text-amber-400 mt-1">•</span>Løpende oppfølging for varige vaner</li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-amber-500/10 rounded-xl">
+                        <p class="text-amber-300 text-sm font-medium">Case-study: 59% reduksjon i sykefravær på 3 måneder</p>
+                    </div>
+                </div>
 
-            <h3>Faglig oppfølging og kvalitetssikring</h3>
-            <ul>
-                <li>Abel stiller strenge krav til faglig forsvarlighet. Veilederne jobber etter yrkesetiske retningslinjer fastsatt av Abel Technologies</li>
-                <li>Selskapet har dedikerte fagansvarlige/kliniske spesialister som veileder veilederne – for eksempel er det medisinsk ansvarlige som kan rådgi i tilfeller som krever spesifikk ekspertise (diabetes, psykologiske problemer, osv.). Omada Health (en lignende aktør i USA) påpeker at for å sikre kvaliteten har de kliniske spesialister in-house som støtter coachene i komplekse situasjoner; Abel har en liknende tilnærming der veilederne inngår i tverrfaglige team og kan rådføre seg med leger eller psykologer ved behov</li>
-                <li>Det gjennomføres også jevnlig kompetanseheving – Abel Education-divisjonen arrangerer kurs og oppdateringer slik at veiledere er oppdatert på ny forskning, verktøy og metoder</li>
-            </ul>
+                <!-- Privatpersoner -->
+                <div class="bg-gradient-to-br from-abel-500/10 to-abel-600/5 border border-abel-500/20 rounded-3xl p-8 card-hover">
+                    <div class="w-14 h-14 bg-abel-500/20 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-abel-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-abel-400 mb-4">For privatpersoner (MITT Beste)</h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex items-start gap-2"><span class="text-abel-400 mt-1">•</span>Registrering via nettsiden, velg helsepakke til fast månedspris</li>
+                        <li class="flex items-start gap-2"><span class="text-abel-400 mt-1">•</span>Kontakt med sertifisert helseveileder innen 48 timer</li>
+                        <li class="flex items-start gap-2"><span class="text-abel-400 mt-1">•</span>Dybdekartlegging og skreddersydd helseplan</li>
+                        <li class="flex items-start gap-2"><span class="text-abel-400 mt-1">•</span>Jevnlig oppfølging via videosamtaler og chat</li>
+                        <li class="flex items-start gap-2"><span class="text-abel-400 mt-1">•</span>Resultatgaranti – nå mål eller få refusjon</li>
+                        <li class="flex items-start gap-2"><span class="text-abel-400 mt-1">•</span>Minimum 3 måneders forløp for varig vaneendring</li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-abel-500/10 rounded-xl">
+                        <p class="text-abel-300 text-sm font-medium">Pakker: "Trygg vektnedgang", "Mental helse" m.fl.</p>
+                    </div>
+                </div>
 
-            <h3>Tilnærming og kapasitet</h3>
-            <p>Abel vektlegger menneskelig kontakt i sin veiledningsfilosofi. Dette innebærer at de ikke forsøker å "skalere" bort veilederen – tvert imot har hver coach et håndterbart antall brukere slik at de kan gi hyppig og personlig oppfølging. Dette står i kontrast til enkelte konkurrenter som har svært høye brukertall per coach og mer automatisert oppfølging. Abels veiledere skal ha tett dialog med hver sin bruker. Som Omadas medisinske sjef uttalte: "Noen selskaper hevder de har coacher, men gir ikke nok kontakt til at det egentlig kan kalles coaching". Abel ønsker å «stikke seg ut» positivt her – de mener langvarige, tillitsfulle relasjoner mellom veileder og bruker er helt essensielt for å oppnå atferdsendring. Veilederne hos Abel fungerer derfor som både mentor, motivator og fagperson for brukeren.</p>
-            
-            <div class="highlight-box">
-                <h4>Oppsummert</h4>
-                <p>Oppsummert har Abel Helses veiledere solid helsebakgrunn, ekstra digital-coach-sertifisering og praktisk erfaring. De støttes av selskapets fagnettverk og teknologi, noe som gjør at de kan levere personlig veiledning på en effektiv måte. Abel fremhever selv at veilederne har "dokumentert kompetanse i vitenskapelig baserte teknikker for atferdsendring" og at dette gir brukerne trygghet for den faglige kvaliteten. At Abel investerer i veiledernes kvalitet er trolig en medvirkende årsak til de gode resultatene som er observert.</p>
+                <!-- NAV/Lege -->
+                <div class="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20 rounded-3xl p-8 card-hover">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-400 mb-4">For NAV/lege-henviste</h3>
+                    <ul class="space-y-3 text-gray-300 text-sm">
+                        <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span>Samarbeid med helsevesenet for henvisninger</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span>Tilgang ofte dekket av det offentlige eller forsikring</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span>Pilotprosjekt med fastleger (Folkehelsemelding 2023)</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span>Arbeidsrettet rehabilitering for langtidssykemeldte</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span>Nordea Liv-avtale for å unngå varig uførhet</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-400 mt-1">•</span>Integrert med BankID og Egde Health Gateway</li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-blue-500/10 rounded-xl">
+                        <p class="text-blue-300 text-sm font-medium">Visjon: 70% av befolkningen kan få tilbud</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oppfølging over tid -->
+            <div class="bg-gradient-to-r from-abel-500/5 via-dark-800/50 to-abel-500/5 border border-abel-500/20 rounded-3xl p-8 md:p-12">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <svg class="w-8 h-8 text-abel-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Oppfølgingen over tid
+                </h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-gray-300 leading-relaxed mb-4">Felles for alle brukergrupper er at Abel fokuserer på <span class="text-abel-400 font-medium">lav terskel og høy kvalitet over tid</span>. Brukeren beholder normalt samme personlige veileder gjennom hele forløpet, for å bygge tillit og kontinuitet.</p>
+                        <p class="text-gray-300 leading-relaxed">Abel benytter forebygging og tidlig intervensjon som prinsipp: veilederne kan fange opp risikofaktorer og iverksette tiltak før fravær oppstår.</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-300 leading-relaxed mb-4">Abels ledelse påpeker at de unngår en "pisk-kultur" – i stedet for press og straff fokuseres det på <span class="text-abel-400 font-medium">positiv motivasjon og støtte</span>.</p>
+                        <p class="text-gray-300 leading-relaxed">Etter endt program får brukerne tilbud om vedlikeholdsoppfølging eller gjenaktivering ved behov. Abel samler også inn anonyme tilbakemeldinger for kontinuerlig forbedring.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section class="section">
-            <h2>Effektmåling og dokumenterte resultater</h2>
+        <!-- Tjenesteinnhold -->
+        <section id="services" class="py-24">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Tjenesteinnhold</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+            </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Indikator</th>
-                        <th>Resultat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Redusert sykefravær</strong></td>
-                        <td>
-                            <ul style="margin: 0; padding-left: 20px;">
-                                <li>Hovedmålet for Abel hos bedriftskunder er å kutte sykefravær. I samarbeid med Storebrand gjennomførte Abel en studie blant barnehageansatte: sykefraværet ble redusert med 70% i løpet av syv måneder sammenlignet med en kontrollgruppe. Dette er en oppsiktsvekkende høy effekt, om enn fra et begrenset utvalg</li>
-                                <li>Abel selv rapporterer at i 2024 reduserte de sykefravær tilsvarende 115 millioner kroner i besparte kostnader for sine partnere</li>
-                                <li>Et konkret case fra Abels kundehistorier viser 59% nedgang i sykefravær på 3 måneder i én bedrift som tok i bruk Abel-veiledning aktivt</li>
-                                <li>Slike tall tyder på at Abel kan ha stor påvirkning, spesielt ved å få langtidssykemeldte raskere tilbake i jobb gjennom tett oppfølging</li>
-                                <li>Det pågår nå en større toårig RCT-studie (Abel-studien) med 1000 ansatte, i samarbeid med SINTEF, for å robust teste effekten på helse og nærvær. Resultatene derfra vil gi enda bedre dokumentasjon</li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Forbedret helse og livsstil</strong></td>
-                        <td>
-                            <ul style="margin: 0; padding-left: 20px;">
-                                <li>Abel retter seg ikke bare mot fravær, men også underliggende helse. Gjennom appens målinger ser de ofte positive endringer i vekt, kondisjon, søvnkvalitet, stressnivå etc.</li>
-                                <li>Selskapet oppgir at over 50 000 personer har fått hjelp til å forbedre sin mentale, fysiske og sosiale helse via Abel per 2024</li>
-                                <li>De kvalitative gevinstene beskrives i kundehistorier: mer energi, bedre helse, ny motivasjon, sterkere samhold og trivsel blant ansatte, ansatte føler seg ivaretatt og mestrer hverdagen bedre</li>
-                                <li>Abel planlegger også medisinske effektstudier: bl.a. nevnes prosjekter ved Oslo universitetssykehus og UiT som skal undersøke effekten av digital veiledning for pasienter med type 2-diabetes og muskel/skjelett-lidelser. Dette indikerer at Abel forventer å vise målbare forbedringer i kliniske helseparametre (blodsukker, smerte, funksjonsevne) hos brukerne</li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Return on Investment (ROI)</strong></td>
-                        <td>
-                            <ul style="margin: 0; padding-left: 20px;">
-                                <li>For bedriftskunder er ROI viktig. Abel hevder at tjenesten gir betydelig positiv ROI – faktisk nevnes "Return of investment: 10× (1000 %?)" på nettsiden (en DN-artikkel antyder Abel sikter mot milliardbesparelser nasjonalt)</li>
-                                <li>Nordea Liv estimerer at deres samarbeid med Abel kan spare samfunnet for 1 milliard kroner over tre år gjennom redusert uførhet. Dette skyldes ikke bare spart sykepengeutbetaling, men også økt produktivitet og verdiskaping når folk forblir friske i arbeid</li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Brukertilfredshet</strong></td>
-                        <td>
-                            <ul style="margin: 0; padding-left: 20px;">
-                                <li>Abel Helse måler tilfredshet jevnlig, bl.a. gjennom stjernerangeringer og undersøkelser. De oppgir at 99% av tilbakemeldingene er 5-stjerners (ifølge en teller på nettsiden)</li>
-                                <li>I Forskningsrådets omtale sies det at Abel var finalist til Innovasjonsprisen 2024 mye pga. dokumenterte effekter og brukeradopsjon</li>
-                                <li>Brukere roser ofte det personlige forholdet til veilederen: "Det at man har en personlig veileder, og ikke bare en robot-app, det betyr veldig mye", sier en av Livas (Danmarks) brukere – en lignende tilbakemelding går igjen hos Abel sine kunder</li>
-                                <li>Særlig viktig er høy tilfredshet blant ledere/HR, da Abel avlaster dem: "Mer tid til å følge opp hver enkelt ansatt", sier en HR-leder om effekten av å bruke Abel for oppfølging</li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Forskningsgrunnlag</strong></td>
-                        <td>
-                            <ul style="margin: 0; padding-left: 20px;">
-                                <li>Abel støtter seg på forskning i utviklingen av tjenesten. Etter at appen opprinnelig hadde fallende brukerengasjement, gjennomførte de grundige undersøkelser som førte til pivoten mot kombinasjon app + menneskelig veileder, noe som "gav økt bruk samt faktiske og varige livsstilsendringer for mange"</li>
-                                <li>De har totalt ~32 faglige publikasjoner som omhandler Abel-metoden indirekte eller direkte (inkludert studier Abel referer til i markedsføring) og 6 randomiserte studier underveis gjennom partnere</li>
-                                <li>Den evidensbaserte tilnærmingen er et viktig salgsargument overfor kunder som ønsker solide, dokumenterte resultater</li>
-                            </ul>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <div class="highlight-box">
-                <h4>Oppsummert</h4>
-                <p>Oppsummert har Abel Helse vist til: betydelig reduksjon i sykefravær i pilotstudier, forbedret helseadferd hos titusenvis av brukere, svært høy brukertilfredshet, og en modell støttet av forskning. Dette gir Abel troverdighet i markedet. Samtidig konkurrerer de i et marked med stor nasjonal og internasjonal konkurranse. Nedenfor sammenligner vi Abel med noen tilsvarende aktører, for å se hvordan Abel differensierer seg.</p>
+            <!-- Kjerneområder -->
+            <h3 class="text-2xl font-bold text-white mb-8">Kjerneområder</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-4">😰</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Stress & utbrenthet</h4>
+                    <p class="text-gray-400 text-sm">Individuelle strategier for stressmestring og forebygging av utbrenthet</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-4">😴</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Søvn & restitusjon</h4>
+                    <p class="text-gray-400 text-sm">Etablering av sunne søvnrutiner og teknikker for bedre søvnkvalitet</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-4">💪</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Fysisk aktivitet & muskel/skjelett</h4>
+                    <p class="text-gray-400 text-sm">Skreddersydd treningsprogram for å forebygge smerter i rygg, nakke, skuldre</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-4">🥗</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Kosthold & vaner</h4>
+                    <p class="text-gray-400 text-sm">Praktiske grep for sunn mat uten ekstreme dietter, fokus på varige vaner</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-4">🧠</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Mental mestring</h4>
+                    <p class="text-gray-400 text-sm">Fokus, motivasjon, selvledelse – bygge psykologisk styrke og robusthet</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-4">📊</div>
+                    <h4 class="text-lg font-bold text-white mb-2">Arbeidshverdag & produktivitet</h4>
+                    <p class="text-gray-400 text-sm">Struktur, prioritering og "digitale vitamin-D-doser" for å jobbe smartere</p>
+                </div>
+            </div>
+
+            <!-- ABEL-appen -->
+            <h3 class="text-2xl font-bold text-white mb-8">Digital plattform (ABEL-appen)</h3>
+            <div class="grid md:grid-cols-2 gap-6 mb-16">
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-abel-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-abel-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">Helseplan og aktiviteter</h4>
+                    </div>
+                    <p class="text-gray-400 text-sm">Skreddersydd plan med konkrete aktiviteter innen trening, kosthold, søvn og mental øvelse. Dynamisk oppdatert av veilederen – ukemeny, treningsøvelser, påminnelser om leggetid.</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-abel-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-abel-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">Dagbok og målinger</h4>
+                    </div>
+                    <p class="text-gray-400 text-sm">Loggfør treningsøkter, måltider, vekt, søvnlengde, smerte eller humør. Visualisering gjennom grafer og statistikk. Integrasjon med smartklokker via Apple Health/Google Fit.</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-abel-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-abel-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">Kommunikasjon</h4>
+                    </div>
+                    <p class="text-gray-400 text-sm">Sikker chat-funksjon for meldinger til veilederen når som helst. Videomøter direkte i grensesnittet. "Regelmessig tilbakemelding og oppfølging" – aldri alene i prosessen.</p>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-2xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-abel-500/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-5 h-5 text-abel-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <h4 class="text-lg font-bold text-white">Læringsinnhold</h4>
+                    </div>
+                    <p class="text-gray-400 text-sm">Daglige/ukentlige artikler og verktøy basert på ny forskning. Podkast og videoressurser. Øker brukerens kunnskap og indre motivasjon.</p>
+                </div>
+            </div>
+
+            <!-- Metodikk -->
+            <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-8 md:p-12 mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6">Metodikk og verktøy</h3>
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="text-center p-6 bg-dark-700/50 rounded-2xl">
+                        <div class="text-4xl mb-4">🧠</div>
+                        <h4 class="font-bold text-white mb-2">Kognitiv atferdsterapi</h4>
+                        <p class="text-gray-400 text-sm">Bevisstgjøring rundt barrierer og utløsningsfaktorer</p>
+                    </div>
+                    <div class="text-center p-6 bg-dark-700/50 rounded-2xl">
+                        <div class="text-4xl mb-4">💬</div>
+                        <h4 class="font-bold text-white mb-2">Motiverende intervju</h4>
+                        <p class="text-gray-400 text-sm">Positiv motivasjon og støtte for langsiktig effekt</p>
+                    </div>
+                    <div class="text-center p-6 bg-dark-700/50 rounded-2xl">
+                        <div class="text-4xl mb-4">🔄</div>
+                        <h4 class="font-bold text-white mb-2">Vanecoaching</h4>
+                        <p class="text-gray-400 text-sm">Norges eneste sertifiserte vanecoach: Andreas Lycke</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 leading-relaxed">
+                    Abel integrerer elementer av <span class="text-abel-400 font-medium">kunstig intelligens</span> i appen. Opprinnelig (2019) brukte de algoritmer og maskinlæring, men fant ut at dette alene ikke holdt på brukernes motivasjon. I dag brukes AI som supplement, men <span class="text-abel-400 font-medium">menneskelig kontakt er i sentrum</span>. Abels grunnlegger understreker at teknologi må kombineres med ekte fagpersoner.
+                </p>
+            </div>
+
+            <!-- ABEL Onsite -->
+            <div class="bg-gradient-to-r from-purple-500/10 via-dark-800/50 to-purple-500/10 border border-purple-500/20 rounded-3xl p-8 md:p-12 mb-16">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center">
+                        <svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-white">ABEL Onsite</h3>
+                        <p class="text-purple-400 text-sm">Lansert august 2025</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 leading-relaxed mb-6">Fysisk forlengelse på arbeidsplassen med gruppetreninger, workshops, foredrag og fysikalsk behandling. Hybrid-opplegget skiller Abel fra rene app-baserte tjenester.</p>
+                <div class="flex flex-wrap gap-3">
+                    <span class="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-full text-sm">Gruppetreninger</span>
+                    <span class="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-full text-sm">Workshops</span>
+                    <span class="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-full text-sm">Foredrag</span>
+                    <span class="px-4 py-2 bg-purple-500/10 text-purple-400 rounded-full text-sm">Fysioterapi</span>
+                </div>
+            </div>
+
+            <!-- Tagline -->
+            <div class="text-center py-12 border-y border-dark-600">
+                <p class="text-2xl md:text-3xl font-bold">
+                    <span class="text-white">"Høy kvalitet.</span>
+                    <span class="text-abel-400"> Lav terskel.</span>
+                    <span class="text-white"> Dokumentert effekt."</span>
+                </p>
             </div>
         </section>
 
-        <section class="section">
-            <h2>Sammenligning med andre aktører i Norden og internasjonalt</h2>
+        <!-- Veiledernes kompetanse -->
+        <section class="py-24">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Veiledernes kompetanse</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+            </div>
 
-            <h3>Nordiske aktører</h3>
+            <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-8 md:p-12 mb-8">
+                <p class="text-lg text-gray-300 leading-relaxed mb-8">
+                    En nøkkelfaktor i Abel-modellen er kompetansen til helseveilederne. Abel Helse har bygget opp et stort team av veiledere med variert helsebakgrunn. Ifølge Norges forskningsråd har Abel per 2025 <span class="text-abel-400 font-semibold">over 45 veiledere</span> ansatt, med utdanning som bl.a. fysioterapeut, psykolog eller sykepleier.
+                </p>
 
-            <h4>Liva Healthcare (Danmark)</h4>
-            <p>Liva (etablert 2014) er en av Nordens ledende på digital helsecoaching for livsstilssykdommer. I likhet med Abel bruker Liva en app + personlig veileder-modell, men deres primærfokus er på overvekt, diabetes og hjerte-helse framfor sykefravær. Liva jobber ofte via offentlige programmer: de leverer f.eks. NHS Digital Weight Management Programme i Storbritannia.</p>
-            <ul>
-                <li><strong>Målgruppe:</strong> Pasienter henvist fra helsevesen (eller via forsikring) samt kommuner som vil forebygge kronisk sykdom. De tilbyr også opplegg til bedrifter, men i mindre grad enn Abel</li>
-                <li><strong>Tjenesteinnhold:</strong> Strukturerte livsstilsforløp: brukeren får en personlig vejleder (coach, typisk klinisk ernæringsfysiolog eller sykepleier) og følger et program for vektreduksjon, ofte 12 måneder langt. Kosthold og fysisk aktivitet er sentrale elementer, og de kan kombinere medikamentell behandling ved behov (f.eks. oppfølging ved bruk av vektreduksjonsmedisiner)</li>
-                <li><strong>Teknologi:</strong> Liva-appen muliggjør både teksting og videomøter med veileder. Brukeren setter mål, sporer vekt, skritt og aktiviteter, og får tilpassede tips. Plattformen er skalerbar og integreres mot helsepersonells systemer; Liva benytter eksempelvis BankID-lignende løsninger i Danmark og leverer data inn i NHS-systemer i UK. Høy grad av skalerbarhet (100+ veiledere, 230k+ brukere)</li>
-                <li><strong>Effekt:</strong> Liva har tung evidens: over 32 fagfellevurderte studier dokumenterer deres resultater. I snitt oppnår brukerne 11% vektreduksjon etter 1 år og signifikant reduksjon i HbA1c (blodsukker) og blodtrykk. Hele 95% av Livas brukere er fornøyde med sin veileder, noe som ligner Abels tilfredshetstall. En viktig forskjell er at Liva måler suksess primært i kliniske helseparametre, mens Abel fokuserer på funksjon (arbeidsdeltakelse). Liva posisjonerer seg i markedet mer som et behandlingstilbud for livsstilssykdom, Abel mer som forebyggende bedriftshelsetiltak, selv om begge overlapper med helsefremmende livsstilscoaching</li>
-            </ul>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-dark-700/50 rounded-2xl p-6">
+                        <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <span class="text-2xl">🎓</span> Utdanning og sertifisering
+                        </h4>
+                        <ul class="space-y-3 text-gray-300 text-sm">
+                            <li>• Etterutdanning i samarbeid med Høyskolen Kristiania (2023)</li>
+                            <li>• Sertifisering som "Digital Helseveileder"</li>
+                            <li>• 200+ studenter tatt opp første året</li>
+                            <li>• Minstekrav: Bachelor + digital veileder-utdanning</li>
+                            <li>• Mange med mastergrader og klinisk erfaring</li>
+                        </ul>
+                    </div>
+                    <div class="bg-dark-700/50 rounded-2xl p-6">
+                        <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <span class="text-2xl">✅</span> Kvalitetssikring
+                        </h4>
+                        <ul class="space-y-3 text-gray-300 text-sm">
+                            <li>• Strenge krav til faglig forsvarlighet</li>
+                            <li>• Yrkesetiske retningslinjer fra Abel Technologies</li>
+                            <li>• Dedikerte fagansvarlige/kliniske spesialister</li>
+                            <li>• Tverrfaglige team med leger og psykologer</li>
+                            <li>• Jevnlig kompetanseheving via Abel Education</li>
+                        </ul>
+                    </div>
+                    <div class="bg-dark-700/50 rounded-2xl p-6">
+                        <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <span class="text-2xl">🤝</span> Tilnærming
+                        </h4>
+                        <ul class="space-y-3 text-gray-300 text-sm">
+                            <li>• Menneskelig kontakt i sentrum</li>
+                            <li>• Håndterbart antall brukere per coach</li>
+                            <li>• Tett dialog og personlig oppfølging</li>
+                            <li>• Veileder = mentor + motivator + fagperson</li>
+                            <li>• Langvarige, tillitsfulle relasjoner</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-            <h4>Health Integrator (Sverige)</h4>
-            <p>Health Integrator er et svensk initiativ (støttet av Stockholm-regionen) for forebygging av kronisk sykdom gjennom digital plattform. Modellen er noe annerledes: deltakerne (for eksempel personer med prediabetes) får et budsjett (via helsefond) de kan bruke på ulike helsetjenester i en app.</p>
-            <ul>
-                <li><strong>Målgruppe:</strong> Primært risikopasienter identifisert av helsevesenet (f.eks. overvektige med fare for diabetes). Health Integrator kobler dem med personlige helsecoacher, men også med andre tiltak (som frisklivssentral, vektklubb etc.)</li>
-                <li><strong>Tjenesteinnhold:</strong> Programmet går over 1 år, med mål om varige vaner innen kosthold og aktivitet. Veilederne følger opp digitalt, litt likt Abel, men brukeren står friere til å benytte flere tjenester</li>
-                <li><strong>Teknologi:</strong> En digital markedsplass/app hvor data om brukerens mål og fremgang deles mellom aktørene. Løsningen ble utviklet med EUs støtte og vektlegger personvern</li>
-                <li><strong>Effekt:</strong> I en pilot med 220 deltakere reduserte 80% av dem helserisikoen sin (bl.a. vektnedgang) i løpet av 1 år. Prosjektet fikk midler fordi det anslås å spare kostnader ved å "betale for helse i stedet for sykdom". Sammenlignet med Abel er Health Integrator mer som en plattform/økosystem, mens Abel leverer en dedikert tjeneste med egne ansatte veiledere. Abel har fordelen av en helhetlig metodikk og kontroll på kvaliteten; Health Integrator gir større valgfrihet og involverer private aktører (f.eks. treningssentre, kostholds-apper) i opplegget. Begge deler visjonen om å bruke digital oppfølging for å bedre folkehelsen</li>
-            </ul>
-            
-            <h4>Tradisjonelle bedriftshelsetjenester</h4>
-            <p>I Norge har man aktører som Avonova, Stamina Helse (Falck) m.fl. Disse leverer bedriftshelse og sykefraværsoppfølging, men tradisjonelt på gammelmåten (fysiske konsultasjoner, HMS-kurs osv.). Noen har begynt å digitalisere seg. For eksempel lanserte DNB og Falck en tjeneste kalt "Helselos" som tilbyr individuell oppfølging på telefon for sykemeldte. Dette ligner Abel ved at en rådgiver følger opp den sykemeldte jevnlig.</p>
-            <p>Men slike tjenester mangler ofte en helhetlig app og datadrevet metodikk. De er også mer begrenset i omfang (typisk noen samtaler over få uker). Differensieringen: Abel skiller seg klart ut fra tradisjonelle BHT-tilbydere ved å være proaktiv og helhetlig – de fokuserer på å forebygge før fravær oppstår, og dekker hele spekteret fra fysisk til psykisk helse i ett program. Tradisjonelle tjenester er mer reaktive (settes inn etter at sykefravær har skjedd) og ofte silo-organisert (egen fysioterapi, egen psykolog etc.). Abel tilbyr én integrert løsning med dataflyt på tvers. Dette har høstet lovord: "Terapeutene får en mye tettere knytning til pasientene, og veileder dem langt mer effektivt", sier Abels gründer om effekten av deres app, og terapeuten sparer tid på rapportering pga. automatisk datalogging. Slikt skiller Abel fra gammel praksis hvor mye tid går bort i papirarbeid.</p>
+        <!-- Effektmåling -->
+        <section id="results" class="py-24">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Dokumenterte resultater</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+            </div>
 
-            <h3>Internasjonale aktører</h3>
+            <div class="grid md:grid-cols-2 gap-6 mb-12">
+                <div class="bg-gradient-to-br from-abel-500/10 to-abel-600/5 border border-abel-500/20 rounded-3xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-abel-500/20 rounded-xl flex items-center justify-center text-2xl">📉</div>
+                        <h3 class="text-xl font-bold text-abel-400">Redusert sykefravær</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-abel-400 font-bold text-lg">70%</span>
+                            <span class="text-sm">Reduksjon i sykefravær på 7 måneder vs. kontrollgruppe (Storebrand-studie)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-abel-400 font-bold text-lg">59%</span>
+                            <span class="text-sm">Nedgang i sykefravær på 3 måneder i én bedrift</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-abel-400 font-bold text-lg">115M</span>
+                            <span class="text-sm">Kroner spart for partnere i 2024</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20 rounded-3xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center text-2xl">💪</div>
+                        <h3 class="text-xl font-bold text-blue-400">Forbedret helse</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-blue-400 font-bold text-lg">50k+</span>
+                            <span class="text-sm">Personer hjulpet til bedre mental, fysisk og sosial helse per 2024</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-blue-400">✓</span>
+                            <span class="text-sm">Positive endringer i vekt, kondisjon, søvnkvalitet, stressnivå</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-blue-400">✓</span>
+                            <span class="text-sm">Planlagte studier ved Oslo universitetssykehus og UiT</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-3xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center text-2xl">💰</div>
+                        <h3 class="text-xl font-bold text-amber-400">Return on Investment</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-amber-400 font-bold text-lg">10×</span>
+                            <span class="text-sm">ROI ifølge Abel (1000% avkastning)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-amber-400 font-bold text-lg">1 mrd</span>
+                            <span class="text-sm">Kroner spart over 3 år estimert av Nordea Liv</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-amber-400">✓</span>
+                            <span class="text-sm">Økt produktivitet og verdiskaping</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-3xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-2xl">⭐</div>
+                        <h3 class="text-xl font-bold text-purple-400">Brukertilfredshet</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-purple-400 font-bold text-lg">99%</span>
+                            <span class="text-sm">5-stjerners tilbakemeldinger</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-purple-400">🏆</span>
+                            <span class="text-sm">Finalist til Innovasjonsprisen 2024</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-purple-400">✓</span>
+                            <span class="text-sm">"Det at man har en personlig veileder, ikke bare en robot-app, betyr veldig mye"</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
-            <h4>Second Nature (Storbritannia)</h4>
-            <p>Second Nature (tidligere OurPath) er en ledende digital vektnedgangs- og livsstilsapp som benyttes av NHS. Målgruppen er hovedsakelig overvektige voksne som ønsker å gå ned i vekt og forebygge diabetes. Over 300 000 NHS-pasienter har fått tilgang til Second Nature via henvisning, og i tillegg markedsføres den direkte til forbrukere og via forsikringsselskaper (f.eks. Vitality).</p>
-            <ul>
-                <li><strong>Tjenesteinnhold:</strong> Second Nature kjører et strukturert 12-ukers program for vektreduksjon basert på atferdsendring, med opsjon for forlengelse i en vedlikeholdsperiode. Hver bruker får en personlig ernæringsfysiolog/helsecoach samt blir plassert i en liten peer-gruppe i appen for gjensidig støtte (den sosiale komponenten er litt annerledes enn Abel, som er 1-til-1; SN utnytter gruppeeffekt). Programmet kombinerer daglige leksjoner om kosthold, mosjon og vaneendring med oppgaver og logging. De tilbyr nå også medisinsk støtte i form av reseptbelagte slankemedisiner for de som kvalifiserer, integrert i programmet (dette er en ny trend)</li>
-                <li><strong>Teknologi:</strong> Second Nature-appen har vektregistrering, aktivitetsmåling, oppskriftsdatabase, progressjonsgrafer og chatfunksjon. Brukerne mottar gjerne en smart badevekt koblet til appen ved oppstart (finansiert av NHS) for objektiv vekttracking. Appen leverer innhold (artikler, videoer) fortløpende som kunnskapspåfyll. Samhandling med coach skjer mest via meldinger i appen, men også ukentlige gruppesamtaler. Plattformen er mindre integrert mot fastleger enn Abel/Liva, men rapporterer aggregerte resultater til NHS</li>
-                <li><strong>Effekt:</strong> Second Nature har publisert studier som viser at rundt 10% gjennomsnittlig vekttap etter programmet, og de framhever nå at med kombinasjon av medisin kan 20–25% vekttap på 12 mnd oppnås for noen. Historier fra brukere (f.eks. folk som har gått ned 30–60 kg) underbygger effekten. Det viktige er at SN også rapporterer langvarige resultater – de ønsker å vise at vekten holder seg nede "for life" ved hjelp av nye vaner. I likhet med Abel legger Second Nature vekt på at deres program er "science-backed" og utviklet av psykologer og dietister, men Abel sitt skille er fokuset på arbeid og funksjon, mens SN utelukkende måler suksess i kilo og helseparametere. Abel er altså bredere (inkluderer mental helse, stress, mestring), mens Second Nature er dypere innen vektreduksjon. Begge tilbyr personlig oppfølging via app; Abel en-til-en, SN også i grupper. Geografisk er Abel mest i Norge/Skandinavia, SN i UK</li>
-            </ul>
+            <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-8">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-2xl">📚</span> Forskningsgrunnlag
+                </h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-abel-400 mb-2">~32</div>
+                        <p class="text-gray-400 text-sm">Faglige publikasjoner</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-abel-400 mb-2">6</div>
+                        <p class="text-gray-400 text-sm">Randomiserte studier underveis</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold text-abel-400 mb-2">1000</div>
+                        <p class="text-gray-400 text-sm">Deltakere i Abel-studien (SINTEF)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-            <h4>Omada Health (USA)</h4>
-            <p>Omada er en pionér innen digital forebygging og behandling av kroniske sykdommer. Siden 2011 har de levert et online Diabetes Prevention Program og har siden utvidet til hypertensjon, atferdshelse og muskel/skjelett-plager. Målgruppen er ofte ansatte som får tilbud via sine arbeidsgivere eller forsikringsplaner i USA.</p>
-            <ul>
-                <li><strong>Tjenesteinnhold:</strong> Omadas programmer er tilpasset diagnose: en for vektreduksjon (prediabetikere), en for diabetesmestring, en for blodtrykkskontroll, osv. Brukeren får konkrete mål (for eksempel 5–7% vektnedgang ved prediabetes) og verktøy – Omada sender ofte fysiske enheter som smartvekt, skrittmåler eller blodtrykksapparat til deltakerne. Coachingen skjer hovedsakelig via meldinger i appen, supplert av gruppediskusjoner for de som ønsker. Hver coach har relativt få medlemmer (Omada har uttalt at "alle medlemmer får en personlig coach fra dag én som følger dem hele veien"). Coachene overvåker dataene som kommer inn automatisk fra vekten osv., og kan gripe inn med justeringer</li>
-                <li><strong>Teknologi:</strong> Omada-plattformen er svært datadrevet – den samler kontinuerlig helsedata fra brukeren (vekt, blodsukker, aktivitetsnivå), og bruker algoritmer til å identifisere hvem som trenger ekstra hjelp. Men Omada har bevisst valgt å satse på menneskelig coaching fremfor helautomatiserte chatboter, i troen på at relasjonen er avgjørende. De har også utviklet et "Insights Lab" som analyserer hvilke coaching-tilnærminger som gir best resultater, for å stadig forbedre kvaliteten. Plattformen kan sømløst eskalere til klinisk personell (f.eks. en fysioterapeut for muskelplager) internt. Integreres ofte med arbeidsgivers helseportal</li>
-                <li><strong>Effekt:</strong> Omada har omfattende ekstern evaluering. En publisert RCT fant at Omada-deltakere oppnådde 5,4% vektreduksjon etter ett år, mot 2% i kontrollgruppen. Videre holdt 2/3 av deltakerne seg under vektbaselinjen to år etterpå, noe som tyder på varig effekt. Omada har også dokumentert forbedringer i HbA1c (mindre overgang til diabetes blant prediabetikere) og i blodtrykk. På økonomisiden har de vist til reduserte helseutgifter for arbeidsgivere (færre diabetes-tilfeller sparer behandlingskostnader). Omada skiller seg fra Abel ved å være mer medisinsk rettet mot sykdomsindikatorer, mens Abel er mer arbeids- og livskvalitetsrettet. Likevel er kjernen felles: intensjonen om å oppnå atferdsendring gjennom digital støtte + personlig coach. Omada opererer i et annet helseøkosystem (USA) der forsikringsselskapene betaler for tjenesten for å unngå dyrere behandling senere – derfor vektlegger de ROI lik Abel. Begge fremhever at de investerer i kvaliteten på coachene i en bransje der noen konkurrenter kutter ned på menneskelig kontakt for å spare kostnader. Abel og Omada er således på linje i filosofi, men jobber med ulike populasjoner og helseutfordringer. Nylig data viser <1% vektøkning i snitt ett år etter at GLP-1 medisin ble stoppet, pga. vedvarende livsstilsvaner</li>
-            </ul>
+        <!-- Sammenligning -->
+        <section id="comparison" class="py-24">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Sammenligning</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+            </div>
 
-            <div class="comparison-table">
-                <h3>Detaljert sammenligningstabell</h3>
-                <table>
+            <!-- Nordiske aktører -->
+            <h3 class="text-2xl font-bold text-white mb-8">Nordiske aktører</h3>
+            <div class="grid lg:grid-cols-3 gap-6 mb-12">
+                <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🇩🇰</span>
+                        <div>
+                            <h4 class="font-bold text-white">Liva Healthcare</h4>
+                            <p class="text-gray-500 text-sm">Etablert 2014</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Fokus på overvekt, diabetes og hjerte-helse. Leverer NHS Digital Weight Management Programme i UK.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Brukere:</span><span class="text-gray-300">230k+</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Vekttap:</span><span class="text-gray-300">11% snitt</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Tilfredshet:</span><span class="text-gray-300">95%</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Studier:</span><span class="text-gray-300">32 publikasjoner</span></div>
+                    </div>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🇸🇪</span>
+                        <div>
+                            <h4 class="font-bold text-white">Health Integrator</h4>
+                            <p class="text-gray-500 text-sm">Stockholm-regionen</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Digital markedsplass med helsefond-budsjett. Risikopasienter velger selv tjenester. EU-støttet.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Modell:</span><span class="text-gray-300">Plattform</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Pilot:</span><span class="text-gray-300">220 deltakere</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Risikored.:</span><span class="text-gray-300">80%</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Varighet:</span><span class="text-gray-300">1 år</span></div>
+                    </div>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🇳🇴</span>
+                        <div>
+                            <h4 class="font-bold text-white">Tradisjonelle BHT</h4>
+                            <p class="text-gray-500 text-sm">Avonova, Stamina/Falck</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Fysiske konsultasjoner, HMS-kurs. Reaktive tjenester. "Helselos" tilbyr telefonoppfølging.</p>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-gray-500">Tilnærming:</span><span class="text-gray-300">Reaktiv</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Struktur:</span><span class="text-gray-300">Silo-basert</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Digital:</span><span class="text-gray-300">Begrenset</span></div>
+                        <div class="flex justify-between"><span class="text-gray-500">Oppfølging:</span><span class="text-gray-300">Få uker</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Internasjonale aktører -->
+            <h3 class="text-2xl font-bold text-white mb-8">Internasjonale aktører</h3>
+            <div class="grid lg:grid-cols-2 gap-6 mb-12">
+                <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🇬🇧</span>
+                        <div>
+                            <h4 class="font-bold text-white">Second Nature</h4>
+                            <p class="text-gray-500 text-sm">Tidligere OurPath • NHS-partner</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">12-ukers vekttapsprogram med peer-grupper. 300k+ NHS-pasienter. Tilbyr GLP-1 medisin. Smart badevekt inkludert.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><span class="text-gray-500">Vekttap:</span> <span class="text-gray-300">5-10%</span></div>
+                        <div><span class="text-gray-500">Med medisin:</span> <span class="text-gray-300">20-25%</span></div>
+                        <div><span class="text-gray-500">Trustpilot:</span> <span class="text-gray-300">4.9/5</span></div>
+                        <div><span class="text-gray-500">Modell:</span> <span class="text-gray-300">Gruppe + 1:1</span></div>
+                    </div>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-2xl">🇺🇸</span>
+                        <div>
+                            <h4 class="font-bold text-white">Omada Health</h4>
+                            <p class="text-gray-500 text-sm">Etablert 2011 • Pionér</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Diabetes Prevention Program. Sender smartvekt og utstyr. "Insights Lab" for kontinuerlig forbedring.</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div><span class="text-gray-500">RCT vekttap:</span> <span class="text-gray-300">5.4% vs 2%</span></div>
+                        <div><span class="text-gray-500">≥5% vekttap:</span> <span class="text-gray-300">43%</span></div>
+                        <div><span class="text-gray-500">Spart/medlem:</span> <span class="text-gray-300">$1.5K/3år</span></div>
+                        <div><span class="text-gray-500">Diabetes red.:</span> <span class="text-gray-300">30%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sammenligning tabell -->
+            <div class="table-container bg-dark-800/50 border border-dark-600 rounded-3xl p-6 mb-12">
+                <h3 class="text-xl font-bold text-white mb-6">Detaljert sammenligning</h3>
+                <table class="w-full min-w-[800px] text-sm">
                     <thead>
-                        <tr>
-                            <th>Kriterium</th>
-                            <th>ABEL Helse (Norge)</th>
-                            <th>Liva Healthcare (DK)</th>
-                            <th>Second Nature (UK)</th>
-                            <th>Omada Health (USA)</th>
+                        <tr class="border-b border-dark-600">
+                            <th class="text-left py-4 px-4 text-gray-400 font-medium">Kriterium</th>
+                            <th class="text-left py-4 px-4 text-abel-400 font-medium">ABEL Helse 🇳🇴</th>
+                            <th class="text-left py-4 px-4 text-gray-400 font-medium">Liva 🇩🇰</th>
+                            <th class="text-left py-4 px-4 text-gray-400 font-medium">Second Nature 🇬🇧</th>
+                            <th class="text-left py-4 px-4 text-gray-400 font-medium">Omada 🇺🇸</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Primære målgrupper</strong></td>
-                            <td>Bedrifter (ansatte), privatpersoner (B2C), henviste pasienter (NAV/fastlege). Fokus på arbeidsliv og forebygging av sykefravær.</td>
-                            <td>Offentlig henviste pasienter (via kommune, sykehus eller NHS), samt noen forsikrings- og bedriftskunder. Fokus på livsstilssykdom (overvekt, diabetes).</td>
-                            <td>NHS-henviste pasienter (overvektige, prediabetikere) og privatkunder via forsikring eller direkte. Smalt fokus på vektnedgang og vektrelatert helse.</td>
-                            <td>Ansatte hos store arbeidsgivere og forsikrede medlemmer (USA), samt enkelte direktebrukere. Fokus på forebygging og håndtering av kroniske sykdommer (diabetes, hypertensjon, etc.).</td>
+                    <tbody class="text-gray-300">
+                        <tr class="border-b border-dark-700">
+                            <td class="py-4 px-4 font-medium text-white">Primært fokus</td>
+                            <td class="py-4 px-4 text-abel-400">Arbeidsliv & sykefravær</td>
+                            <td class="py-4 px-4">Overvekt & diabetes</td>
+                            <td class="py-4 px-4">Vektnedgang</td>
+                            <td class="py-4 px-4">Kroniske sykdommer</td>
+                        </tr>
+                        <tr class="border-b border-dark-700">
+                            <td class="py-4 px-4 font-medium text-white">Målgrupper</td>
+                            <td class="py-4 px-4">Bedrifter, privatpersoner, NAV/lege</td>
+                            <td class="py-4 px-4">Offentlig henviste, forsikring</td>
+                            <td class="py-4 px-4">NHS-pasienter, privat</td>
+                            <td class="py-4 px-4">Arbeidsgivere, forsikring</td>
+                        </tr>
+                        <tr class="border-b border-dark-700">
+                            <td class="py-4 px-4 font-medium text-white">Oppfølging</td>
+                            <td class="py-4 px-4">1:1 ukentlig/annenhver uke</td>
+                            <td class="py-4 px-4">Hver 2-4 uke</td>
+                            <td class="py-4 px-4">Gruppe + chat</td>
+                            <td class="py-4 px-4">1:1 + gruppe</td>
+                        </tr>
+                        <tr class="border-b border-dark-700">
+                            <td class="py-4 px-4 font-medium text-white">Varighet</td>
+                            <td class="py-4 px-4">≥3 mnd (løpende)</td>
+                            <td class="py-4 px-4">6-12 mnd</td>
+                            <td class="py-4 px-4">12 uker + vedlikehold</td>
+                            <td class="py-4 px-4">16-52 uker</td>
                         </tr>
                         <tr>
-                            <td><strong>Tjenesteinnhold</strong></td>
-                            <td>Helhetlig helseveiledning innen stress, søvn, aktivitet, kosthold, mental helse m.m. Skreddersydd plan per bruker. Oppfølging av personlig veileder ukentlig/annenhver uke (typisk ≥3 mnd).</td>
-                            <td>Livsstilsprogrammer for vekttap og sykdomsforebygging. Personlig vejleder (coach) med skreddersydde råd, oppfølging primært hver 2.–4. uke over 6–12 mnd. Sterkt vekt på kostholdsendring, aktivitet og evt. medisinsk behandling ved behov.</td>
-                            <td>12-ukers intensivt vekttapsprogram med daglige læringsmoduler, mat- og aktivitetsplan. Hver bruker får en ernæringsfysiolog som coach og inngår i en liten peer-gruppe for støtte. Tilbyr også opsjon på legemiddel (GLP-1) for vektnedgang.</td>
-                            <td>16-52 ukers digitale programmer for vektreduksjon, diabeteskontroll, blodtrykksenkning, osv. Personlig helsecoach tildeles fra dag én og følger brukeren hele programmet. Leverer også utstyr (smart vekt, aktivitetsmåler) og konkrete mål.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Teknologi & plattform</strong></td>
-                            <td>ABEL-app med BankID-sikker innlogging. Inneholder helseplan, dagbok og chat/videsamtale-funksjon. Integrert med norske journalsystemer via Egde Gateway. Automatisk logging av brukerdata som deles med veileder i sanntid.</td>
-                            <td>Liva-appen brukes til all oppfølging. Bruker og vejleder kommuniserer via meldinger og periodiske video-møter. Plattformen er designet for helsesektoren – integreres i NHS og kommunale systemer. Støtter automatisk skritt- og vektregistrering.</td>
-                            <td>Second Nature mobilapp med vektlogging, måltidsjournal, oppgaver og innholdsartikler. Inkluderer tracking-verktøy og push-varsler. Gir tilgang til chat med coach og gruppediskusjon. Sender fysisk startpakke (smart badevekt, kokebok etc.) til brukerne via NHS.</td>
-                            <td>Omada digital platform (nett og mobil) som kombinerer app og tilkoblet utstyr. Automatisert datafangst: trådløs vekt sender resultater til appen, aktivitetsdata importeres automatisk. AI-verktøy prioriterer hvilke brukere som trenger ekstra oppmerksomhet.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Dokumentert effekt</strong></td>
-                            <td>
-                                <strong>Sykefravær:</strong> Reduserte sykefravær med 70% på 7 mnd vs. kontroll. Case: 59% nedgang på 3 mnd. Estimert 115 mill. kr spart (2 år).<br>
-                                <strong>Helse:</strong> Deltakere rapporterer økt energi og mestring.<br>
-                                <strong>Tilfredshet:</strong> Svært høy – de fleste gir 5/5 stjerner.
-                            </td>
-                            <td>
-                                <strong>Kliniske mål:</strong> I snitt 11% vekttap etter 12 mnd (blant 230 000+ brukere). HbA1c redusert 16 mmol/mol på 6 mnd hos diabetespasienter, BT ned 12 mmHg i snitt.<br>
-                                <strong>Evidens:</strong> 6 RCT-studier bekrefter effekt, 32 publikasjonsreferanser.<br>
-                                <strong>Brukertilfredshet:</strong> 95% er fornøyde med sin veileder. Mange case-historier om 10–35 kg vekttap og bedre mental helse.
-                            </td>
-                            <td>
-                                <strong>Vektreduksjon:</strong> ~5–10% kroppsvekt i gjennomsnitt ned etter 3 mnd program (intern data). Med ny kombinasjon (livsstil + medisin) forventes 15–25% vekttap i løpet av 1 år.<br>
-                                <strong>Skalering:</strong> 300 000+ deltakere via NHS siden oppstart. Offisielt godkjent leverandør i nasjonale forebyggingsprogram (Diabetes Prevention).<br>
-                                <strong>Kundetilfredshet:</strong> Second Nature har Excellent-rating på Trustpilot (4.9/5). Mange personlige suksesshistorier i media. Langsiktig data antyder at en god andel klarer vektvedlikehold "for life" med nye vaner.
-                            </td>
-                            <td>
-                                <strong>Klinisk utfall:</strong> RCT viste 5,4% gj.sn. vekttap ved 1 år vs. 2% i kontroll. 43% av deltakerne oppnådde ≥5% vektreduksjon. Deltakere med prediabetes hadde 30% lavere progresjon til diabetes enn kontroll (AMA report). Andre mål: Signifikant blodtrykkssenking og forbedret medisinadhersjon er dokumentert i konferanseabstracts.<br>
-                                <strong>Kostnadsbesparelse:</strong> Kaiser Permanente rapporterte $1,5K spart per medlem over 3 år grunnet færre sykdomsutgifter (omnystats). Omada fremhever at human coaching gir mer varig endring, og nylig data viser <1% vektøkning i snitt ett år etter at GLP-1 medisin ble stoppet, pga. vedvarende livsstilsvaner. Kundenes tilfredshet er høy, men bransjemålinger fokuserer mer på kliniske resultater og ROI.
-                            </td>
+                            <td class="py-4 px-4 font-medium text-white">Integrasjoner</td>
+                            <td class="py-4 px-4 text-abel-400">BankID, journalsystemer, Egde Gateway</td>
+                            <td class="py-4 px-4">NHS, kommuner</td>
+                            <td class="py-4 px-4">NHS (begrenset)</td>
+                            <td class="py-4 px-4">Arbeidsgiverportaler</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="highlight-box">
-                <h3>Analyse</h3>
-                <p>Tabellen illustrerer at Abel Helse og de andre aktørene alle benytter digital coach-modellen, men de differensierer seg på fokus og bredde. Abel er bredest tematisk (inkluderer arbeidsfunksjon, mental helse og muskelskjelett, ikke bare livsstilssykdom), og integrert i norsk arbeidslivs- og helse-kontekst. Liva og Second Nature er mer spesialiserte på metabolsk helse (vekt, diabetes) og opererer tett med offentlige helseprogram. Omada er igjen bred i kroniske lidelser, men i en forsikringsdrevet setting i USA.</p>
-                <p>Abels største fortrinn i Norge er kombinasjonen av dokumentert effekt på sykefravær, helhetlig tilnærming og sterk forskningsforankring. Ingen andre norske aktører har per i dag vist like høy prosentvis reduksjon i fravær på så kort tid. Abel har også skapt en ny yrkesgruppe (digitale helseveiledere) og satt en standard for kompetanse som konkurrenter trolig vil måtte forholde seg til. I Skandinavia er Liva Healthcare det nærmeste sammenlignbare i størrelse og evidens; Liva har større internasjonalt fotavtrykk (UK, Midtøsten) og spisset medisinsk profil, mens Abel har unik tilgang til NAV/bedriftsmarkedet i Norge.</p>
-                <p>Abel skiller seg ut ved å bygge bro mellom helsesektor og arbeidsliv – f.eks. via avtaler som den med Nordea Liv, der sykemeldte følges opp både digitalt og fysisk for å unngå uføretrygd. Slik posisjonering (forebygging av uførhet) er relativt unik, og muliggjøres av Abels tette samarbeid med forskningsmiljø og offentlige instanser.</p>
-                <p>Internasjonalt sett følger Abel trenden med å kombinere AI/digital plattform med menneskelig coaching, slik også Second Nature og Omada gjør, fremfor helt automatiserte apper (ala enkelte vektapp-konsepter uten personlig oppfølging). Dette "high tech + high touch"-prinsippet ser ut til å gi bedre resultater enn rene app-tiltak. Omadas observasjon om konkurrenter som kutter ned på coacher for å spare kostnader antyder at Abel gjør klokt i å holde coach-andelen høy – det er deres hovedverdi.</p>
-                <p>I sum leverer Abel Helse en innovativ tjenestemodell innen helseveiledning, med dokumentert effekt på nøkkelmål som sykefravær og livskvalitet. Sammenlignet med nordiske og internasjonale aktører er Abel mer helhetlig og arbeidssentrert, mens de andre ofte er mer sykdoms- eller vektsentrert. Abel differensierer seg også gjennom dyp integrasjon i helsenettet (journalsystemer, BankID) og ved å ha bygget en egen utdanningspipeline for veiledere – dette sikrer kontroll på kvaliteten i alle ledd. For norske bedrifter og offentlige virksomheter som vil redusere fravær og bedre de ansattes helse, fremstår Abel som en ledende aktør med et unikt, forskningsbasert konsept. Selv om konkurransen øker både i Norge, Norden og fra globale selskaper, har Abel posisjonert seg sterkt gjennom dokumentasjon, sertifisering og skaleringsmuligheter som gjør dem til en attraktiv partner for både næringsliv og helsevesen.</p>
+            <!-- Analyse -->
+            <div class="bg-gradient-to-r from-abel-500/5 via-dark-800/50 to-abel-500/5 border border-abel-500/20 rounded-3xl p-8 md:p-12">
+                <h3 class="text-2xl font-bold text-white mb-6">Analyse og differensiering</h3>
+                <div class="space-y-6 text-gray-300 leading-relaxed">
+                    <p>Abel er <span class="text-abel-400 font-medium">bredest tematisk</span> (inkluderer arbeidsfunksjon, mental helse og muskelskjelett), mens de andre ofte er mer sykdoms- eller vektsentrert.</p>
+                    <p>Abels største fortrinn i Norge er kombinasjonen av <span class="text-abel-400 font-medium">dokumentert effekt på sykefravær</span>, helhetlig tilnærming og sterk forskningsforankring. Ingen andre norske aktører har vist like høy prosentvis reduksjon i fravær på så kort tid.</p>
+                    <p>Abel har også skapt en <span class="text-abel-400 font-medium">ny yrkesgruppe</span> (digitale helseveiledere) og satt en standard for kompetanse. Abel differensierer seg gjennom <span class="text-abel-400 font-medium">dyp integrasjon i helsenettet</span> (journalsystemer, BankID) og egen utdanningspipeline for veiledere.</p>
+                    <p>Dette "high tech + high touch"-prinsippet ser ut til å gi bedre resultater enn rene app-tiltak. Omadas observasjon om konkurrenter som kutter ned på coacher antyder at Abel gjør klokt i å holde coach-andelen høy.</p>
+                </div>
             </div>
         </section>
 
-        <section class="section">
-            <h2>En praktisk "utenfra og inn"-forståelse av ABEL</h2>
-            <p>Her er en praktisk "utenfra og inn"-forståelse av ABEL (basert på det de beskriver offentlig), med fokus på 1) hvilke brukere de har, 2) kundereisen, og 3) hvordan de faktisk hjelper pasienten/brukeren.</p>
-
-            <h3>1) Hvilke pasienter/brukere ABEL ser ut til å ha</h3>
-            
-            <div class="key-points">
-                <h4>A. Bedriftsansatte (B2B via arbeidsgiver) er hovedsporet</h4>
-                <p>På ABEL Helse-siden posisjonerer de seg tydelig mot arbeidsliv og sykefravær: "inkluderende helseveiledning for hele bedriften", med onboarding, matching mot veileder og mål om redusert fravær.</p>
-                <p>Typiske "brukerproblem" de fronter:</p>
-                <ul>
-                    <li>Stress og utbrenthet</li>
-                    <li>Søvn og restitusjon</li>
-                    <li>Muskel-skjelett (rygg, nakke, skuldre)</li>
-                    <li>Kosthold og vaner</li>
-                    <li>Mental mestring</li>
-                    <li>Arbeidshverdag og produktivitet</li>
-                </ul>
+        <!-- Praktisk forståelse -->
+        <section class="py-24">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">Praktisk forståelse</h2>
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-dark-600 to-transparent"></div>
             </div>
 
-            <div class="key-points">
-                <h4>B. Privatpersoner (egenbetaling) finnes, men ligger mer på MITT Beste-sporet</h4>
-                <p>I personvernerklæringen skriver de eksplisitt at man kan bruke tjenesten ved å betale selv, via arbeidsplass, eller via henvisning fra lege/NAV. MITT Beste beskriver et "direkte til privatperson"-løp med skreddersydd helseplan, ukentlige samtaler med digital helseveileder og aktiviteter i ABEL-appen.</p>
+            <p class="text-gray-400 text-center max-w-2xl mx-auto mb-12">En "utenfra og inn"-forståelse av ABEL basert på offentlig tilgjengelig informasjon</p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-12">
+                <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-8">
+                    <h3 class="text-xl font-bold text-white mb-6">Brukertyper</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-dark-700/50 rounded-xl">
+                            <h4 class="font-bold text-amber-400 mb-2">A. Bedriftsansatte (B2B)</h4>
+                            <p class="text-gray-400 text-sm">Hovedsporet. Inkluderende helseveiledning for hele bedriften med mål om redusert fravær.</p>
+                        </div>
+                        <div class="p-4 bg-dark-700/50 rounded-xl">
+                            <h4 class="font-bold text-abel-400 mb-2">B. Privatpersoner</h4>
+                            <p class="text-gray-400 text-sm">MITT Beste-sporet med egenbetaling, skreddersydd helseplan og ukentlige samtaler.</p>
+                        </div>
+                        <div class="p-4 bg-dark-700/50 rounded-xl">
+                            <h4 class="font-bold text-blue-400 mb-2">C. Henviste brukere</h4>
+                            <p class="text-gray-400 text-sm">NAV/lege-kanal. Brukes av helsepersonell for å få langtidssykemeldte tilbake i jobb.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-8">
+                    <h3 class="text-xl font-bold text-white mb-6">Hvordan ABEL hjelper</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 bg-abel-500/20 rounded-lg flex items-center justify-center text-abel-400 font-bold shrink-0">1</div>
+                            <div>
+                                <h4 class="font-bold text-white">Personlig oppfølging</h4>
+                                <p class="text-gray-400 text-sm">Vitenskapelig baserte teknikker for atferdsendring</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 bg-abel-500/20 rounded-lg flex items-center justify-center text-abel-400 font-bold shrink-0">2</div>
+                            <div>
+                                <h4 class="font-bold text-white">Digital plattform</h4>
+                                <p class="text-gray-400 text-sm">Struktur, aktiviteter, grafer og chat med helseveileder</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 bg-abel-500/20 rounded-lg flex items-center justify-center text-abel-400 font-bold shrink-0">3</div>
+                            <div>
+                                <h4 class="font-bold text-white">Måling og dokumentasjon</h4>
+                                <p class="text-gray-400 text-sm">Kombinasjon av app + veiledning med dokumenterte effekter</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-8 h-8 bg-abel-500/20 rounded-lg flex items-center justify-center text-abel-400 font-bold shrink-0">4</div>
+                            <div>
+                                <h4 class="font-bold text-white">Hybrid med Onsite</h4>
+                                <p class="text-gray-400 text-sm">Fysisk forlengelse på arbeidsplassen fra aug 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="key-points">
-                <h4>C. Henviste brukere (NAV/lege/helsepersonell) er også en relevant kanal</h4>
-                <ul>
-                    <li>Personvernteksten nevner henvisning fra lege eller NAV</li>
-                    <li>Forskningsrådet omtaler at ABEL har NAV på kundelisten, og at app/metode også ble brukt av helsepersonell for å få langtidssykemeldte tilbake i jobb</li>
-                </ul>
-            </div>
-
-            <h3>2) Kundereisen slik den ser ut fra ABEL Helse (arbeidsgiverløpet)</h3>
-            <p>Dette er "3-stegs"-reisen de selv beskriver:</p>
-            <ol>
-                <li><strong>Ansatte melder seg på:</strong> Onboarding kartlegger situasjon, mål og tilgjengelighet</li>
-                <li><strong>Behovsanalyse og matching:</strong> ABEL kobler mot veileder med riktig kompetanse</li>
-                <li><strong>Oppfølging som skal gi bedre helse og lavere fravær:</strong> De beskriver resultatet som mer robuste, fornøyde og produktive ansatte</li>
-            </ol>
-            
-            <div class="highlight-box">
-                <h4>Hva som typisk skjer "inne i" steg 2–3</h4>
-                <ul>
-                    <li>Individuell veiledning med fagperson (helseveileder)</li>
-                    <li>Plan, vaner, aktiviteter og progresjon over tid</li>
-                    <li>Måling/innsikt på bruk og progresjon, men "uten å gå på kompromiss med personvernet" på arbeidsgiversiden (indikasjon på aggregert rapportering)</li>
-                </ul>
-            </div>
-
-            <h3>3) Kundereisen slik den ser ut i forsknings-/studieløpet (mer konkret)</h3>
-            <p>ABEL-studien-siden gir et veldig konkret bilde av hvordan et ABEL-forløp kan se ut når det er strukturert som intervensjon:</p>
-            <ul>
-                <li>Deltaker setter opp ABEL-appen og kobler eventuelt Garmin Connect til appen</li>
-                <li>En helseveileder beskrives som en fagperson som gir individuell veiledning via videosamtaler og app, hvor man setter mål og lager plan for livsstilsendringer knyttet til fysisk og mental helse</li>
-                <li>Mulighet for å bytte veileder hvis det ikke fungerer</li>
-            </ul>
-            <p>Dette gir et godt "operativt" inntrykk: de kombinerer strukturert oppfølging + digital plattform, og kan bruke wearable-data i hvert fall i noen opplegg.</p>
-
-            <h3>4) Hvordan ABEL hjelper brukeren i praksis (hva verdien består av)</h3>
-            <p>Ut fra ABELs egen kommunikasjon og tredjepartsomtale virker "hjelpen" å være en kombinasjon av:</p>
-            
-            <div class="key-points">
-                <h4>1) Personlig oppfølging som motoren</h4>
-                <p>De er tydelige på "personlig helseveiledning" og at veilederne bruker vitenskapelig baserte teknikker for atferdsendring.</p>
-            </div>
-
-            <div class="key-points">
-                <h4>2) Digital plattform for struktur, aktiviteter og dialog</h4>
-                <p>Personvernteksten beskriver mobil-/webapplikasjon og at de logger handlinger for å levere tjenesten, forbedre den og kommunisere med brukeren. MITT Beste beskriver også profil i ABEL-appen med aktiviteter (trening, kosthold, mentale og sosiale oppgaver), grafer og chat med helseveileder.</p>
-            </div>
-
-            <div class="key-points">
-                <h4>3) Måling og dokumentasjon (både for individ og effekt)</h4>
-                <p>Forskningsrådet og forskning.no omtaler kombinasjonen av app + personlig veiledning, samt dokumenterte effekter i studier (for eksempel barnehage-RCT med stor reduksjon i sykefravær) og at de jobber tungt forskningsbasert.</p>
-            </div>
-
-            <div class="key-points">
-                <h4>4) Mulig "hybridisering" med fysisk tilbud (Onsite)</h4>
-                <p>ABEL Onsite beskrives som fysisk forlengelse på arbeidsplassen, med gruppetrening, workshops, foredrag og også tilgang til fysikalsk behandling, lansert fra august 2025.</p>
-            </div>
-
-            <div class="highlight-box">
-                <h3>5) Hvis du skal forstå "hva slags pasienter de har" enda mer presist</h3>
-                <p>Basert på hvordan de posisjonerer seg offentlig, er de mest avhengige av segmentering som ikke står fullt ut på nettsiden. Jeg ville derfor strukturert interne avklaringer slik:</p>
-                <ul>
-                    <li><strong>Inntakskanaler og volum:</strong> andel via arbeidsgiver vs egenbetaling vs NAV/lege-henvisning</li>
-                    <li><strong>Primærproblem per bruker:</strong> stress/søvn/MSK/livsstil/mental mestring, og hvor mange som er "tilbake-til-jobb" vs forebygging</li>
-                    <li><strong>Intervensjonsdesign:</strong> frekvens på samtaler, varighet (typisk 8 uker? 12 uker? 6 mnd?), og hvor mye som er synkron video vs asynkron oppfølging i app</li>
-                    <li><strong>Rapportering til arbeidsgiver:</strong> hvilke aggregerte KPIer de leverer (bruk, trivsel, progresjon), og hva som aldri deles (individdata)</li>
-                </ul>
+            <div class="bg-dark-800/50 border border-dark-600 rounded-3xl p-8">
+                <h3 class="text-xl font-bold text-white mb-6">Kundereise (3-stegs modell)</h3>
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex-1 text-center p-6 bg-dark-700/50 rounded-2xl">
+                        <div class="w-12 h-12 bg-abel-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-abel-400 font-bold text-xl">1</div>
+                        <h4 class="font-bold text-white mb-2">Ansatte melder seg på</h4>
+                        <p class="text-gray-400 text-sm">Onboarding kartlegger situasjon, mål og tilgjengelighet</p>
+                    </div>
+                    <svg class="w-8 h-8 text-dark-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    <div class="flex-1 text-center p-6 bg-dark-700/50 rounded-2xl">
+                        <div class="w-12 h-12 bg-abel-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-abel-400 font-bold text-xl">2</div>
+                        <h4 class="font-bold text-white mb-2">Behovsanalyse & matching</h4>
+                        <p class="text-gray-400 text-sm">ABEL kobler mot veileder med riktig kompetanse</p>
+                    </div>
+                    <svg class="w-8 h-8 text-dark-600 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    <div class="flex-1 text-center p-6 bg-dark-700/50 rounded-2xl">
+                        <div class="w-12 h-12 bg-abel-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-abel-400 font-bold text-xl">3</div>
+                        <h4 class="font-bold text-white mb-2">Oppfølging</h4>
+                        <p class="text-gray-400 text-sm">Bedre helse, lavere fravær, mer robuste ansatte</p>
+                    </div>
+                </div>
             </div>
         </section>
+    </main>
 
-        <footer>
-            <p>Dokumentasjon om Abel Helse - Kundereise, Tjenesteinnhold og Sammenligning med Andre Helseveiledere</p>
-            <p style="margin-top: 10px; font-size: 0.85em;">Kilder: Se referanseliste i teksten</p>
-        </footer>
-    </div>
+    <!-- Footer -->
+    <footer class="border-t border-dark-600 py-12 mt-24">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="text-2xl font-bold gradient-text mb-4">ABEL Helse</div>
+            <p class="text-gray-400 mb-2">Kundereise, Tjenesteinnhold og Sammenligning med Andre Helseveiledere</p>
+            <p class="text-gray-500 text-sm">Dokumentasjon basert på offentlig tilgjengelig informasjon</p>
+        </div>
+    </footer>
 </body>
 </html>
-
