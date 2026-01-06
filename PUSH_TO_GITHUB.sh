@@ -2,7 +2,7 @@
 # Run this script AFTER creating the GitHub repository
 # Replace YOUR_USERNAME with your actual GitHub username
 
-GITHUB_USERNAME="YOUR_USERNAME"  # CHANGE THIS!
+GITHUB_USERNAME="karlml"
 REPO_NAME="abel-helse-docs"
 
 echo "🚀 Pushing to GitHub..."
