@@ -1,0 +1,12 @@
+{
+  "name": "abel-helse",
+  "version": "1.0.0",
+  "description": "Abel Helse - Kundereise og Sammenligning",
+  "scripts": {
+    "prerender": "node prerender.js",
+    "build": "npm run prerender"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}
